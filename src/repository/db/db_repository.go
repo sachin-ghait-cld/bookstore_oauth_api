@@ -1,8 +1,6 @@
 package db
 
 import (
-	"errors"
-
 	"github.com/gocql/gocql"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/clients/cassandra"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/domain/accesstoken"
@@ -42,7 +40,7 @@ func (r *dbRepository) GetByID(id string) (*accesstoken.AccessToken, *rest_error
 		if err == gocql.ErrNotFound {
 			return nil, rest_errors.NewNotFoundError("no access token found with given id")
 		}
-		return nil, rest_errors.NewInternalServerError("error when trying to get current id", errors.New("database error"))
+		return nil, rest_errors.NewInternalServerError("error when trying to get current id")
 	}
 	return &result, nil
 }

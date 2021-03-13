@@ -1,8 +1,9 @@
-package accesstoken
+package access_token
 
 import (
 	"strings"
 
+	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/domain/accesstoken"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/repository/db"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/repository/rest"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/utils/rest_errors"
@@ -10,16 +11,16 @@ import (
 
 // Service to specify methods
 type Service interface {
-	GetByID(string) (*AccessToken, *rest_errors.RestErr)
-	Create(AccessTokenRequest) (*AccessToken, *rest_errors.RestErr)
-	UpdateExpirationTime(AccessToken) *rest_errors.RestErr
+	GetByID(string) (*accesstoken.AccessToken, *rest_errors.RestErr)
+	Create(accesstoken.AccessTokenRequest) (*accesstoken.AccessToken, *rest_errors.RestErr)
+	UpdateExpirationTime(accesstoken.AccessToken) *rest_errors.RestErr
 }
 
 // Repository interface
 type Repository interface {
-	GetByID(string) (*AccessToken, *rest_errors.RestErr)
-	Create(AccessTokenRequest) (*AccessToken, *rest_errors.RestErr)
-	UpdateExpirationTime(AccessToken) *rest_errors.RestErr
+	GetByID(string) (*accesstoken.AccessToken, *rest_errors.RestErr)
+	Create(accesstoken.AccessTokenRequest) (*accesstoken.AccessToken, *rest_errors.RestErr)
+	UpdateExpirationTime(accesstoken.AccessToken) *rest_errors.RestErr
 }
 type service struct {
 	restUsersRepo rest.RestUsersRepository
@@ -35,7 +36,7 @@ func NewService(restRepo rest.RestUsersRepository, dbRepo db.DbRepository) Servi
 }
 
 // GetByID func
-func (s *service) GetByID(accessTokenID string) (*AccessToken, *rest_errors.RestErr) {
+func (s *service) GetByID(accessTokenID string) (*accesstoken.AccessToken, *rest_errors.RestErr) {
 	accessTokenID = strings.TrimSpace(accessTokenID)
 	if len(accessTokenID) == 0 {
 		return nil, rest_errors.NewBadRequestError("accessTokenId not valid")
@@ -47,7 +48,7 @@ func (s *service) GetByID(accessTokenID string) (*AccessToken, *rest_errors.Rest
 	return accessToken, nil
 }
 
-func (s *service) Create(request AccessTokenRequest) (*AccessToken, *rest_errors.RestErr) {
+func (s *service) Create(request accesstoken.AccessTokenRequest) (*accesstoken.AccessToken, *rest_errors.RestErr) {
 	if err := request.Validate(); err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (s *service) Create(request AccessTokenRequest) (*AccessToken, *rest_errors
 	}
 
 	// Generate a new access token:
-	at := GetNewAccessToken(user.ID)
+	at := accesstoken.GetNewAccessToken(user.ID)
 	at.Generate()
 
 	// Save the new access token in Cassandra:
@@ -71,7 +72,7 @@ func (s *service) Create(request AccessTokenRequest) (*AccessToken, *rest_errors
 	return &at, nil
 }
 
-func (s *service) UpdateExpirationTime(at AccessToken) *rest_errors.RestErr {
+func (s *service) UpdateExpirationTime(at accesstoken.AccessToken) *rest_errors.RestErr {
 	if err := at.Validate(); err != nil {
 		return err
 	}
