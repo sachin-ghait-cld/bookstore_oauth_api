@@ -2,11 +2,12 @@ package rest
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/federicoleon/golang-restclient/rest"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/domain/users"
-	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/utils/rest_errors"
+	"github.com/sachin-ghait-cld/bookstore_utils-go/rest_errors"
 )
 
 var (
@@ -37,20 +38,22 @@ func (r *userRepository) Login(email string, password string) (*users.User, *res
 	}
 	resp := userRestClient.Post("/login", request)
 	if resp == nil || resp.Response == nil {
-		return nil, rest_errors.NewInternalServerError("Invalid response when trying to get user")
+		return nil, rest_errors.NewInternalServerError("Invalid response when trying to get user",
+			errors.New("api_response_err"))
 	}
 	if resp.StatusCode > 299 {
 		var restErr rest_errors.RestErr
 		err := json.Unmarshal(resp.Bytes(), &restErr)
 		if err != nil {
-
-			return nil, rest_errors.NewInternalServerError("Invalid error interface")
+			return nil, rest_errors.NewInternalServerError("Invalid error interface",
+				errors.New("interface_err"))
 		}
 		return nil, &restErr
 	}
 	var user users.User
 	if err := json.Unmarshal(resp.Bytes(), &user); err != nil {
-		return nil, rest_errors.NewInternalServerError("invalid user interface")
+		return nil, rest_errors.NewInternalServerError("invalid user interface",
+			errors.New("json_err"))
 	}
 	return &user, nil
 }

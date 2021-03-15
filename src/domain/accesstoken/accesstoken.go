@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/utils/crypto_utils"
-	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/utils/rest_errors"
+	"github.com/sachin-ghait-cld/bookstore_utils-go/rest_errors"
 )
 
 const (

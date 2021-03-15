@@ -15,3 +15,4 @@
 # vendor/
 src/__debug_bin
 .vscode/launch.json
+*.DS_store

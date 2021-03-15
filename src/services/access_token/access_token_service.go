@@ -6,7 +6,7 @@ import (
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/domain/accesstoken"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/repository/db"
 	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/repository/rest"
-	"github.com/sachin-ghait-cld/bookstore_oauth_api/src/utils/rest_errors"
+	"github.com/sachin-ghait-cld/bookstore_utils-go/rest_errors"
 )
 
 // Service to specify methods
