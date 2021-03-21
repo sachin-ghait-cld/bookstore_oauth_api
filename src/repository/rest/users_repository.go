@@ -19,7 +19,7 @@ var (
 
 // RestUsersRepository interface
 type RestUsersRepository interface {
-	Login(string, string) (*users.User, *rest_errors.RestErr)
+	Login(string, string) (*users.User, rest_errors.RestErr)
 }
 
 // NewRepository DbRepository
@@ -31,7 +31,7 @@ type userRepository struct {
 }
 
 // Login Get token By ID
-func (r *userRepository) Login(email string, password string) (*users.User, *rest_errors.RestErr) {
+func (r *userRepository) Login(email string, password string) (*users.User, rest_errors.RestErr) {
 	request := users.UserLoginRequest{
 		Email:    email,
 		Password: password,
@@ -48,7 +48,7 @@ func (r *userRepository) Login(email string, password string) (*users.User, *res
 			return nil, rest_errors.NewInternalServerError("Invalid error interface",
 				errors.New("interface_err"))
 		}
-		return nil, &restErr
+		return nil, restErr
 	}
 	var user users.User
 	if err := json.Unmarshal(resp.Bytes(), &user); err != nil {

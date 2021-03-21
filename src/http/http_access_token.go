@@ -29,7 +29,7 @@ func NewHandler(service access_token.Service) AccessTokenHandler {
 func (handler *accessTokenHandler) GetByID(c *gin.Context) {
 	accesstoken, err := handler.service.GetByID(c.Param("access_token_id"))
 	if err != nil {
-		c.JSON(err.Status, err)
+		c.JSON(err.Status(), err)
 		return
 	}
 	c.JSON(http.StatusOK, accesstoken)
@@ -40,12 +40,12 @@ func (handler *accessTokenHandler) CreateToken(c *gin.Context) {
 	var tokenreq accesstoken.AccessTokenRequest
 	if err := c.ShouldBindJSON(&tokenreq); err != nil {
 		restErr := rest_errors.NewBadRequestError("Invalid JSON body")
-		c.JSON(restErr.Status, restErr)
+		c.JSON(restErr.Status(), restErr)
 		return
 	}
 	accessToken, createErr := handler.service.Create(tokenreq)
 	if createErr != nil {
-		c.JSON(createErr.Status, createErr)
+		c.JSON(createErr.Status(), createErr)
 		return
 	}
 	c.JSON(http.StatusCreated, accessToken)
@@ -56,12 +56,12 @@ func (handler *accessTokenHandler) UpdateToken(c *gin.Context) {
 	var token accesstoken.AccessToken
 	if err := c.ShouldBindJSON(&token); err != nil {
 		restErr := rest_errors.NewBadRequestError("Invalid JSON body")
-		c.JSON(restErr.Status, restErr)
+		c.JSON(restErr.Status(), restErr)
 		return
 	}
 	err := handler.service.UpdateExpirationTime(token)
 	if err != nil {
-		c.JSON(err.Status, err)
+		c.JSON(err.Status(), err)
 		return
 	}
 	c.JSON(http.StatusOK, token)

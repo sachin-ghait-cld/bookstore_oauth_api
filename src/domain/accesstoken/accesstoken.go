@@ -24,7 +24,7 @@ type AccessToken struct {
 }
 
 // Validate AccessToken
-func (at *AccessToken) Validate() *rest_errors.RestErr {
+func (at *AccessToken) Validate() rest_errors.RestErr {
 	at.AccessToken = strings.TrimSpace(at.AccessToken)
 	if at.AccessToken == "" {
 		return rest_errors.NewBadRequestError("accessTokenId not valid")
@@ -54,7 +54,7 @@ type AccessTokenRequest struct {
 }
 
 // Validate AccessTokenRequest
-func (atr *AccessTokenRequest) Validate() *rest_errors.RestErr {
+func (atr *AccessTokenRequest) Validate() rest_errors.RestErr {
 	switch atr.GrantType {
 	case grantTypePassword:
 		break
